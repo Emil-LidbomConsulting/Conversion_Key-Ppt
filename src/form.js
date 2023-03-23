@@ -9,16 +9,31 @@ function Form() {
 
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
-    setFile(file);
+    const options = {
+      type: 'application/vnd.apple.keynote'
+    };
+    const convertedFile = new Blob([file], options);
+    setFile(convertedFile);
   }
+    
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-      console.log(file);
-      const response = convertFile(file)
-      console.log(response)
+    if (file) {
+        console.log(file)
+        convertFile(file)
+        .then(downloadUrl => {
+          console.log(`Download URL: ${downloadUrl}`);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    } else {
+        console.log("No file selected.");
+    }
   }
+  
   return(
     <div className="form-wrapper">
         <form className="form" onSubmit={handleSubmit}>
